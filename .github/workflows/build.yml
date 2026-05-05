@@ -6,17 +6,34 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Source2Roblox
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
+          path: Source2Roblox
+
+      - name: Checkout Roblox-File-Format
+        uses: actions/checkout@v4
+        with:
+          repository: MaximumADHD/Roblox-File-Format
+          path: Roblox-File-Format
+
+      - name: Checkout ValveKeyValue
+        uses: actions/checkout@v4
+        with:
+          repository: nicklvsa/ValveKeyValue
+          path: ValveKeyValue
+
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
+
       - name: Restore NuGet packages
-        run: nuget restore Source2Roblox.sln
+        run: nuget restore Source2Roblox/Source2Roblox.sln
+
       - name: Build
-        run: msbuild Source2Roblox.sln /p:Configuration=Release
+        run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Source2Roblox
-          path: bin/Release/
+          path: Source2Roblox/bin/Release/
