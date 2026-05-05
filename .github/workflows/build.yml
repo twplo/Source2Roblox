@@ -33,7 +33,7 @@ jobs:
         run: nuget restore Source2Roblox/Source2Roblox.sln
 
       - name: Build
-        run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release
+        run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release /p:Platform="Any CPU" /p:PlatformTarget=x64
 
       - name: Install ILMerge
         run: nuget install ILMerge -OutputDirectory ilmerge
@@ -41,7 +41,7 @@ jobs:
       - name: Merge into single exe
         run: |
           $ilmerge = Get-ChildItem -Path "ilmerge" -Recurse -Filter "ILMerge.exe" | Select-Object -First 1 -ExpandProperty FullName
-          & $ilmerge /out:Source2Roblox\bin\Release\Source2Roblox_merged.exe /targetplatform:v4 Source2Roblox\bin\Release\Source2Roblox.exe Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\ValveKeyValue.dll Source2Roblox\bin\Release\Newtonsoft.Json.dll Source2Roblox\bin\Release\SevenZip.dll
+          & $ilmerge /out:Source2Roblox\bin\Release\Source2Roblox_merged.exe /targetplatform:v4,C:\Windows\Microsoft.NET\Framework64\v4.0.30319 Source2Roblox\bin\Release\Source2Roblox.exe Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\ValveKeyValue.dll Source2Roblox\bin\Release\Newtonsoft.Json.dll Source2Roblox\bin\Release\SevenZip.dll
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
