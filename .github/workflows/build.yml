@@ -35,6 +35,12 @@ jobs:
       - name: Build
         run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release
 
+      - name: Copy RobloxFileFormat dll
+        run: copy Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\
+
+      - name: Copy ValveKeyValue dll
+        run: copy ValveKeyValue\ValveKeyValue\ValveKeyValue\bin\Release\ValveKeyValue.dll Source2Roblox\bin\Release\
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
