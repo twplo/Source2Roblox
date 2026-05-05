@@ -36,13 +36,12 @@ jobs:
         run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release
 
       - name: Find RobloxFileFormat dll
-        run: dir /s /b Roblox-File-Format\*.dll
+        run: Get-ChildItem -Path "Roblox-File-Format" -Recurse -Filter "*.dll" | Select-Object FullName
 
-      - name: Copy RobloxFileFormat dll
-        run: copy Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\
-
-      - name: Copy ValveKeyValue dll
-        run: copy ValveKeyValue\ValveKeyValue\ValveKeyValue\bin\Release\ValveKeyValue.dll Source2Roblox\bin\Release\
+      - name: Copy dlls to output
+        run: |
+          Get-ChildItem -Path "Roblox-File-Format" -Recurse -Filter "RobloxFileFormat.dll" | Copy-Item -Destination "Source2Roblox\bin\Release\"
+          Get-ChildItem -Path "ValveKeyValue" -Recurse -Filter "ValveKeyValue.dll" | Copy-Item -Destination "Source2Roblox\bin\Release\"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
