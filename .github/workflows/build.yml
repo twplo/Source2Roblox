@@ -20,7 +20,7 @@ jobs:
       - name: Checkout ValveKeyValue
         uses: actions/checkout@v4
         with:
-          repository: nicklvsa/ValveKeyValue
+          repository: MaximumADHD/ValveKeyValue
           path: ValveKeyValue
 
       - name: Add MSBuild to PATH
