@@ -26,7 +26,10 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
 
-      - name: Restore NuGet packages
+      - name: Restore NuGet for Roblox-File-Format
+        run: nuget restore Roblox-File-Format/RobloxFileFormat.csproj -SolutionDirectory Roblox-File-Format
+
+      - name: Restore NuGet for Source2Roblox
         run: nuget restore Source2Roblox/Source2Roblox.sln
 
       - name: Build
