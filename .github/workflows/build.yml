@@ -35,6 +35,9 @@ jobs:
       - name: Build
         run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release
 
+      - name: Find RobloxFileFormat dll
+        run: dir /s /b Roblox-File-Format\*.dll
+
       - name: Copy RobloxFileFormat dll
         run: copy Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\
 
