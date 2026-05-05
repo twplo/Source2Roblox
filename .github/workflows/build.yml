@@ -35,16 +35,16 @@ jobs:
       - name: Build
         run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release
 
-      - name: Find RobloxFileFormat dll
-        run: Get-ChildItem -Path "Roblox-File-Format" -Recurse -Filter "*.dll" | Select-Object FullName
+      - name: Install ILMerge
+        run: nuget install ILMerge -OutputDirectory ilmerge
 
-      - name: Copy dlls to output
+      - name: Merge into single exe
         run: |
-          Get-ChildItem -Path "Roblox-File-Format" -Recurse -Filter "RobloxFileFormat.dll" | Copy-Item -Destination "Source2Roblox\bin\Release\"
-          Get-ChildItem -Path "ValveKeyValue" -Recurse -Filter "ValveKeyValue.dll" | Copy-Item -Destination "Source2Roblox\bin\Release\"
+          $ilmerge = Get-ChildItem -Path "ilmerge" -Recurse -Filter "ILMerge.exe" | Select-Object -First 1 -ExpandProperty FullName
+          & $ilmerge /out:Source2Roblox\bin\Release\Source2Roblox_merged.exe /targetplatform:v4 Source2Roblox\bin\Release\Source2Roblox.exe Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\ValveKeyValue.dll Source2Roblox\bin\Release\Newtonsoft.Json.dll Source2Roblox\bin\Release\SevenZip.dll
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Source2Roblox
-          path: Source2Roblox/bin/Release/
+          path: Source2Roblox/bin/Release/Source2Roblox_merged.exe
