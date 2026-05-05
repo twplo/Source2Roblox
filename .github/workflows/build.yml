@@ -33,18 +33,18 @@ jobs:
         run: nuget restore Source2Roblox/Source2Roblox.sln
 
       - name: Build
-        run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release /p:Platform="Any CPU" /p:PlatformTarget=x64
+        run: msbuild Source2Roblox/Source2Roblox.sln /p:Configuration=Release /p:PlatformTarget=x64
 
-      - name: Install ILMerge
-        run: nuget install ILMerge -OutputDirectory ilmerge
-
-      - name: Merge into single exe
+      - name: Copy all dlls to output
         run: |
-          $ilmerge = Get-ChildItem -Path "ilmerge" -Recurse -Filter "ILMerge.exe" | Select-Object -First 1 -ExpandProperty FullName
-          & $ilmerge /out:Source2Roblox\bin\Release\Source2Roblox_merged.exe /targetplatform:v4,C:\Windows\Microsoft.NET\Framework64\v4.0.30319 Source2Roblox\bin\Release\Source2Roblox.exe Roblox-File-Format\bin\Release\RobloxFileFormat.dll Source2Roblox\bin\Release\ValveKeyValue.dll Source2Roblox\bin\Release\Newtonsoft.Json.dll Source2Roblox\bin\Release\SevenZip.dll
+          Get-ChildItem -Path "Roblox-File-Format\bin\Release" -Filter "*.dll" | Copy-Item -Destination "Source2Roblox\bin\Release\"
+          Get-ChildItem -Path "Roblox-File-Format\packages" -Recurse -Filter "*.dll" | Where-Object { $_.FullName -match "net4" -or $_.FullName -match "net45" -or $_.FullName -match "net47" } | Copy-Item -Destination "Source2Roblox\bin\Release\"
+
+      - name: List output files
+        run: Get-ChildItem -Path "Source2Roblox\bin\Release\" | Select-Object Name
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Source2Roblox
-          path: Source2Roblox/bin/Release/Source2Roblox_merged.exe
+          path: Source2Roblox/bin/Release/
